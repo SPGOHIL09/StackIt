@@ -8,6 +8,12 @@ StackIt is a collaborative Q&A platform for developers, inspired by Stack Overfl
 ## 👥 Authors
 - **Shatrunjaypratapsing Gohil**  
   Email: spgohil09@gmail.com
+- **Ronak Thesiya**  
+  Email: ronakthesiya2004@gmail.com
+- **Viraj Patel**  
+  Email: virajpatel1635@gmail.com
+- **Paresh Chaudhary**  
+  Email: pareshchaudhary330@gmail.com
 
 ## 📦 Tech Stack
 - **Frontend:** React, Vite, Bootstrap
@@ -22,12 +28,7 @@ StackIt is a collaborative Q&A platform for developers, inspired by Stack Overfl
 
 
 
-## 🖼️ Screenshot
-Add a screenshot of your app's main page here:
 
-```
-![App Screenshot](frontend/public/vite.svg)
-```
 
 ---
 
