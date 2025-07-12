@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Question = require("../models/Question");
+const Answer = require("../models/Answer");
 const { protect } = require("../middleware/auth");
 
 router.post("/", protect, async (req, res) => {
@@ -16,13 +17,26 @@ router.get("/", async (req, res) => {
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit));
+  
+  // Add answer count to each question
+  const questionsWithAnswerCount = await Promise.all(
+    questions.map(async (question) => {
+      const answerCount = await Answer.countDocuments({ question: question._id });
+      return {
+        ...question.toObject(),
+        answerCount
+      };
+    })
+  );
+  
   const total = await Question.countDocuments();
-  res.json({ questions, total });
+  res.json({ questions: questionsWithAnswerCount, total });
 });
 
 router.get("/:id", async (req, res) => {
   const question = await Question.findById(req.params.id).populate("user", "username");
-  res.json(question);
+  const answerCount = await Answer.countDocuments({ question: req.params.id });
+  res.json({ ...question.toObject(), answerCount });
 });
 // Upvote a question
 router.put("/:id/upvote", protect, async (req, res) => {
