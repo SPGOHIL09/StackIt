@@ -1,36 +1,33 @@
-// backend/server.js
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const userRoutes = require("./routes/userRoutes");
-const questionRoutes = require("./routes/questionRoutes");
-const answerRoutes = require("./routes/answerRoutes");
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 dotenv.config();
-
 const app = express();
 
-// Middlewares
-app.use(cors());
+// CORS configuration - More permissive for development
+const corsOptions = {
+  origin: true, // Allow all origins in development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// Sample Route
-app.get("/", (req, res) => {
-  res.send("Welcome to StackIt Backend");
-});
-app.use("/api/users", userRoutes);
-app.use("/api/questions", questionRoutes);
-app.use("/api/answers", answerRoutes);
-// DB Connection
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log("MongoDB Connected");
-  app.listen(process.env.PORT || 5000, () => {
-    console.log(`Server running on port ${process.env.PORT || 5000}`);
-  });
-})
-.catch((err) => console.error("DB Connection Error:", err));
+// Routes
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/questions", require("./routes/questionRoutes"));
+app.use("/api/answers", require("./routes/answerRoutes"));
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
+    );
+  })
+  .catch((err) => console.error("Mongo error", err));
